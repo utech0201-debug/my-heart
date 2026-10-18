@@ -3,9 +3,9 @@ import { useEffect, useRef, useState } from "react";
 
 // ✏️ Make it yours
 const LINES = [
-  "Bernice, your smile is my favourite sunrise. One look and my whole day glows.",
+  "Anne, your smile is my favourite sunrise. One look and my whole day glows.",
   "Your jokes could make any bad day surrender. I'd happily lose every argument just to hear you laugh.",
-  "And when you're angry? Still the most beautiful thing I've ever seen. Yes, even then. 😂",
+  "Even in the simplest moments, your presence brings the brightest light into my world? Still the most beautiful thing I've ever seen. Yes, even then. 😂",
   "So I built you this little corner of the internet, to ask what my heart keeps whispering.",
 ];
 const SIGNATURE = "Yours, Oscar ❣️";
@@ -181,10 +181,10 @@ export default function Page() {
       <main>
         {step === 0 && (
           <section className="step">
-            <h1 className="name">Bernice 💖</h1>
+            <h1 className="name">Anne 💖</h1>
             <p className="sub">There's a letter for you. Tap the seal.</p>
             <div className={`env ${open ? "open" : ""}`}>
-              <div className="paper"><span>For Bernice 💖</span></div>
+              <div className="paper"><span>For Anne 💖</span></div>
               <div className="flap" />
               <button className="seal" onClick={openLetter} aria-label="Open the letter">💌</button>
             </div>
@@ -222,7 +222,7 @@ export default function Page() {
         {step === 2 && (
           <section className="step">
             <div className="card">
-              <h2 className="ask">Bernice, will you be my girlfriend? 💖</h2>
+              <h2 className="ask">Anne, will you be my girlfriend? 💖</h2>
               <div className="row">
                 <button className="yes" onClick={celebrate} style={{ transform: `scale(${1 + tries * 0.16})`, margin: tries * 5 }}>Yes 💖</button>
                 <button className="quiet" onClick={notYet} onPointerEnter={(e) => e.pointerType === "mouse" && tries > 0 && hop()} style={{ transform: `translate(${pos.x}px,${pos.y}px) scale(${Math.max(0.65, 1 - tries * 0.07)})` }}>{LABELS[tries]}</button>
@@ -247,7 +247,7 @@ export default function Page() {
                   <p className="line" style={{ minHeight: 0, marginBottom: ".7em" }}>You just made me the happiest person alive. I promise you laughter, adventures, and arguments I'll happily lose.</p>
                   <div className="cert">
                     <b>Official Girlfriend Certificate</b>
-                    <span>Bernice ❤ Oscar</span>
+                    <span>Anne ❤ Oscar</span>
                     <small>{date} · screenshot this 📸</small>
                   </div>
                   <p className="sub" style={{ margin: "0 0 .8em" }}>{SIGNATURE}</p>
