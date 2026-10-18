@@ -4,7 +4,7 @@ import "./globals.css";
 const script = Dancing_Script({ subsets: ["latin"], weight: ["600", "700"], variable: "--font-script" });
 const sans = Nunito({ subsets: ["latin"], weight: ["400", "600", "700"], variable: "--font-sans" });
 
-export const metadata = { title: "For Bernice 💖", description: "A letter for you" };
+export const metadata = { title: "For Anne 💖", description: "A letter for you" };
 export const viewport = { width: "device-width", initialScale: 1, viewportFit: "cover" };
 
 export default function RootLayout({ children }) {
