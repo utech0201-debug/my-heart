@@ -8,11 +8,19 @@ const LINES = [
   "Even in the simplest moments, your presence brings the brightest light into my world? Still the most beautiful thing I've ever seen. Yes, even then. 😂",
   "So I built you this little corner of the internet, to ask what my heart keeps whispering.",
 ];
+const LINES_FR = [
+  "Anne, ton sourire est mon plus beau lever de soleil. Un seul regard et toute ma journée s’illumine.",
+  "Tes blagues feraient capituler n’importe quelle mauvaise journée. Je perdrais volontiers chaque débat juste pour t’entendre rire.",
+  "Même dans les moments les plus simples, ta présence apporte la plus belle lumière à mon monde. Tu es toujours la plus belle chose que j’aie jamais vue. Oui, même à cet instant. 😂",
+  "Alors j’ai créé ce petit coin d’Internet pour te poser la question que mon cœur me souffle sans cesse.",
+];
 const SIGNATURE = "Yours, Oscar ❣️";
+const SIGNATURE_FR = "À toi, Oscar ❣️";
 // 📸 Optional: put a photo of you two in /public and set it, e.g. "/us.jpg"
 const PHOTO = "";
 
 const LABELS = ["Not yet", "Are you sure?", "Think again 🥺", "Really?", "Pretty please", "Okay, yes"];
+const LABELS_FR = ["Pas encore", "Tu es sûre ?", "Réfléchis encore 🥺", "Vraiment ?", "S’il te plaît", "D’accord, oui"];
 const FLOAT = ["💗", "💖", "💕", "✨", "🌸", "🌹"];
 const POP = ["💖", "💗", "💍", "✨", "💕", "🌹"];
 const rand = (a, b) => a + Math.random() * (b - a);
@@ -99,6 +107,10 @@ function Couple({ love }) {
 
 export default function Page() {
   const [step, setStep] = useState(0);
+  const [language, setLanguage] = useState("en");
+  const isFrench = language === "fr";
+  const lines = isFrench ? LINES_FR : LINES;
+  const labels = isFrench ? LABELS_FR : LABELS;
   const [open, setOpen] = useState(false);
   const [n, setN] = useState(0);
   const [done, setDone] = useState(false);
@@ -151,7 +163,7 @@ export default function Page() {
 
   const openLetter = () => { setOpen(true); try { startMusic(); setMusic(true); } catch {} setTimeout(() => setStep(1), 1500); };
   const toggleMusic = () => { try { if (music) { stopMusic(); setMusic(false); } else { startMusic(); setMusic(true); } } catch {} };
-  const next = () => { if (n < LINES.length - 1) { setDone(false); setN(n + 1); } else setStep(4); };
+  const next = () => { if (n < lines.length - 1) { setDone(false); setN(n + 1); } else setStep(4); };
   const celebrate = () => {
     setPops(Array.from({ length: 80 }, (_, k) => ({ g: POP[k % 6], left: rand(0, 100), size: rand(16, 44), dur: rand(3, 7), delay: rand(0, 2.5) })));
     navigator.vibrate?.([80, 60, 80, 60, 200]);
@@ -176,15 +188,16 @@ export default function Page() {
         {floaters.map((f, i) => <span key={i} style={{ left: `${f.left}vw`, fontSize: f.size, animationDuration: `${f.dur}s`, animationDelay: `${f.delay}s` }}>{f.g}</span>)}
       </div>
 
+      <button onClick={() => setLanguage(isFrench ? "en" : "fr")} aria-label={isFrench ? "Switch to English" : "Traduire en français"} style={{ position: "fixed", top: "16px", right: "16px", zIndex: 20, padding: ".65em 1em", fontSize: ".9rem" }}>{isFrench ? "🇬🇧 English" : "🇫🇷 Traduire en français"}</button>
       <button className="mute" onClick={toggleMusic} aria-label={music ? "Mute music" : "Play music"}>{music ? "🎵" : "🔇"}</button>
 
       <main>
         {step === 0 && (
           <section className="step">
             <h1 className="name">Anne 💖</h1>
-            <p className="sub">There's a letter for you. Tap the seal.</p>
+            <p className="sub">{isFrench ? "Une lettre t’attend. Touche le sceau." : "There's a letter for you. Tap the seal."}</p>
             <div className={`env ${open ? "open" : ""}`}>
-              <div className="paper"><span>For Anne 💖</span></div>
+              <div className="paper"><span>{isFrench ? "Pour Anne 💖" : "For Anne 💖"}</span></div>
               <div className="flap" />
               <button className="seal" onClick={openLetter} aria-label="Open the letter">💌</button>
             </div>
@@ -194,10 +207,10 @@ export default function Page() {
         {step === 1 && (
           <section className="step">
             <div className="card">
-              <p className="line"><Typed key={n} text={LINES[n]} onDone={() => setDone(true)} /></p>
+              <p className="line"><Typed key={`${language}-${n}`} text={lines[n]} onDone={() => setDone(true)} /></p>
               <div className="dots">{LINES.map((_, i) => <i key={i} className={i === n ? "on" : ""} />)}</div>
               <button onClick={next} style={{ opacity: done ? 1 : 0, pointerEvents: done ? "auto" : "none" }}>
-                {n === LINES.length - 1 ? "One more thing 💖" : "Keep going"}
+                {n === lines.length - 1 ? (isFrench ? "Encore une chose 💖" : "One more thing 💖") : (isFrench ? "Continue" : "Keep going")}
               </button>
             </div>
           </section>
@@ -206,7 +219,7 @@ export default function Page() {
         {step === 4 && (
           <section className="step">
             <div className="card">
-              <h2 className="ask" style={{ fontSize: "clamp(2rem,9vw,2.8rem)" }}>Hold my heart to unlock my question</h2>
+              <h2 className="ask" style={{ fontSize: "clamp(2rem,9vw,2.8rem)" }}>{isFrench ? "Tiens mon cœur pour découvrir ma question" : "Hold my heart to unlock my question"}</h2>
               <button className="hold" style={{ "--p": hold }} aria-label="Press and hold to fill the heart"
                 onPointerDown={() => { dir.current = 1; }} onPointerUp={() => { dir.current = -1; }}
                 onPointerLeave={() => { dir.current = -1; }} onPointerCancel={() => { dir.current = -1; }}
@@ -214,7 +227,7 @@ export default function Page() {
                 onContextMenu={(e) => e.preventDefault()}>
                 <span style={{ transform: `scale(${1 + hold / 250})` }}>❤️</span>
               </button>
-              <p className="sub" style={{ margin: 0 }}>Love level: {Math.round(hold)}%</p>
+              <p className="sub" style={{ margin: 0 }}>{isFrench ? "Niveau d’amour" : "Love level"} : {Math.round(hold)}%</p>
             </div>
           </section>
         )}
@@ -222,10 +235,10 @@ export default function Page() {
         {step === 2 && (
           <section className="step">
             <div className="card">
-              <h2 className="ask">Anne, will you be my girlfriend? 💖</h2>
+              <h2 className="ask">{isFrench ? "Anne, veux-tu être ma petite amie ? 💖" : "Anne, will you be my girlfriend? 💖"}</h2>
               <div className="row">
-                <button className="yes" onClick={celebrate} style={{ transform: `scale(${1 + tries * 0.16})`, margin: tries * 5 }}>Yes 💖</button>
-                <button className="quiet" onClick={notYet} onPointerEnter={(e) => e.pointerType === "mouse" && tries > 0 && hop()} style={{ transform: `translate(${pos.x}px,${pos.y}px) scale(${Math.max(0.65, 1 - tries * 0.07)})` }}>{LABELS[tries]}</button>
+                <button className="yes" onClick={celebrate} style={{ transform: `scale(${1 + tries * 0.16})`, margin: tries * 5 }}>{isFrench ? "Oui 💖" : "Yes 💖"}</button>
+                <button className="quiet" onClick={notYet} onPointerEnter={(e) => e.pointerType === "mouse" && tries > 0 && hop()} style={{ transform: `translate(${pos.x}px,${pos.y}px) scale(${Math.max(0.65, 1 - tries * 0.07)})` }}>{labels[tries]}</button>
               </div>
             </div>
           </section>
@@ -235,7 +248,7 @@ export default function Page() {
           <section className="step">
             {!official ? (
               <div className="card">
-                <p className="line" style={{ minHeight: 0 }}>Making it official… 💞</p>
+                <p className="line" style={{ minHeight: 0 }}>{isFrench ? "On officialise tout ça… 💞" : "Making it official… 💞"}</p>
                 <div className="bar"><i /></div>
               </div>
             ) : (
@@ -243,17 +256,17 @@ export default function Page() {
                 <div className="rings" aria-hidden="true"><i /><i /><i /></div>
                 <div className="bigheart" aria-hidden="true">❤️</div>
                 <div className="card">
-                  <h1 className="name">She said yes! 🥹</h1>
-                  <p className="line" style={{ minHeight: 0, marginBottom: ".7em" }}>You just made me the happiest person alive. I promise you laughter, adventures, and arguments I'll happily lose.</p>
+                  <h1 className="name">{isFrench ? "Elle a dit oui ! 🥹" : "She said yes! 🥹"}</h1>
+                  <p className="line" style={{ minHeight: 0, marginBottom: ".7em" }}>{isFrench ? "Tu viens de faire de moi la personne la plus heureuse au monde. Je te promets des rires, des aventures et des disputes que je perdrai avec plaisir." : "You just made me the happiest person alive. I promise you laughter, adventures, and arguments I'll happily lose."}</p>
                   <div className="cert">
-                    <b>Official Girlfriend Certificate</b>
+                    <b>{isFrench ? "Certificat officiel de petite amie" : "Official Girlfriend Certificate"}</b>
                     <span>Anne ❤ Oscar</span>
-                    <small>{date} · screenshot this 📸</small>
+                    <small>{date} · {isFrench ? "fais une capture d’écran" : "screenshot this"} 📸</small>
                   </div>
-                  <p className="sub" style={{ margin: "0 0 .8em" }}>{SIGNATURE}</p>
+                  <p className="sub" style={{ margin: "0 0 .8em" }}>{isFrench ? SIGNATURE_FR : SIGNATURE}</p>
                   <div className="tell">
-                    <a className="btn" href="/api/tell?via=sms">Text Oscar 💌</a>
-                    <a className="btn" href="/api/tell?via=wa">WhatsApp Oscar 💬</a>
+                    <a className="btn" href="/api/tell?via=sms">{isFrench ? "Écrire à Oscar 💌" : "Text Oscar 💌"}</a>
+                    <a className="btn" href="/api/tell?via=wa">{isFrench ? "WhatsApp d’Oscar 💬" : "WhatsApp Oscar 💬"}</a>
                   </div>
                 </div>
               </>
